@@ -7,8 +7,7 @@ const wrapper = document.querySelector(".wrapper"),
   wIcon = weatherPart.querySelector("img"),
   arrowBack = wrapper.querySelector("header i");
 
-const apiKey = "YOUR_API"; // Replace with your actual API key
-let api;
+const apiKey = "1493a9104f582b32ac2d3b2754f408c7"; // Replace with your actual API key
 
 inputField.addEventListener("keyup", (e) => {
   if (e.key == "Enter" && inputField.value != "") {
@@ -25,14 +24,14 @@ locationBtn.addEventListener("click", () => {
 });
 
 function requestApi(city) {
-  api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
-  fetchData();
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
+  fetchData(url);
 }
 
 function onSuccess(position) {
   const { latitude, longitude } = position.coords;
-  api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
-  fetchData();
+  const url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${apiKey}`;
+  fetchData(url);
 }
 
 function onError(error) {
@@ -40,10 +39,10 @@ function onError(error) {
   infoTxt.classList.add("error");
 }
 
-function fetchData() {
+function fetchData(url) {
   infoTxt.innerText = "Getting weather details...";
   infoTxt.classList.add("pending");
-  fetch(api)
+  fetch(url)
     .then((res) => res.json())
     .then((result) => weatherDetails(result))
     .catch(() => {
@@ -59,28 +58,11 @@ function weatherDetails(info) {
   } else {
     const city = info.name;
     const country = info.sys.country;
-    const { description, id } = info.weather[0];
+    const { description, icon } = info.weather[0]; // get icon code from API
     const { temp, feels_like, humidity } = info.main;
 
-    if (id == 800) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13TlzPFrICsSEB3llo6PWuywWpoL6ywxb";
-    } else if (id >= 200 && id <= 232) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13eqt-OgtVphxXYpIHd9Q7QOBNocK0Onq";
-    } else if (id >= 600 && id <= 622) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13Z9FbAC1FJ-ptr55vUWUufLBCrhgjbF1";
-    } else if (id >= 701 && id <= 781) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13YVPMlryJ3168jk-VR_zfTvVBL6Xeaqs";
-    } else if (id >= 801 && id <= 804) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13TVP9iuZz8A9cf3OtJCgTmeS9AtJ-B3R";
-    } else if ((id >= 500 && id <= 531) || (id >= 300 && id <= 321)) {
-      wIcon.src =
-        "https://drive.google.com/uc?export=view&id=13YoLrgIqfw6UHTu0x4yqTRLIyCbT1O6e";
-    }
+    // Use OpenWeatherMap's official icon
+    wIcon.src = `https://openweathermap.org/img/wn/${icon}@4x.png`;
 
     weatherPart.querySelector(".temp .numb").innerText = Math.floor(temp);
     weatherPart.querySelector(".weather").innerText = description;

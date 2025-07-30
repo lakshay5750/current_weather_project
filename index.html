@@ -7,13 +7,14 @@
 
 </head>
 <body>
-<!-- partial:index.partial.html -->
+
 <div class="wrapper">
-  <header><i class='bx bx-left-arrow-alt'></i>Weather App</header>
+  <header><i class='bx bx-left-arrow-alt' role="button" aria-label="Go back"></i>Weather App</header>
   <section class="input-part">
-    <p class="info-txt"></p>
+    <p class="info-txt" aria-live="polite"></p>
     <div class="content">
-      <input type="text" spellcheck="false" placeholder="Enter city name" required>
+      <label for="city-input" class="visually-hidden">Enter city name</label>
+      <input id="city-input" type="text" spellcheck="false" placeholder="Enter city name" required>
       <div class="separator"></div>
       <button>Get Device Location</button>
     </div>
